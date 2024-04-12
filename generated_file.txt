@@ -1,31 +1,68 @@
-// Get all roles
-exports.getRoles = async (req, res) => {
-  try {
-    const roles = await Role.find();
-    res.status(200).json({ success: true, data: roles });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
+const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
+
+
+exports.register = async (req, res) => {
+    const { firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles } = req.body;
+
+    try {
+        const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(400).json({ error: 'User registration failed' });
+    }
+};
+exports.login = (req, res, next) => {
+    const { email, password } = req.body;
+
+    console.log("Login request received:", { email, password }); // Log the email and password received
+
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            console.error("Passport authentication error:", err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        if (!user) {
+            console.log("Authentication failed:", info.message || 'Login failed'); // Log any authentication failure messages
+            return res.status(400).json({ message: info.message || 'Login failed' });
+        }
+
+        console.log("User authenticated successfully:", user);
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        // Send response with token and user data
+        res.json({ token, user });
+    })(req, res, next);
 };
 
-// Get roles by name
-exports.getRolesByName = async (req, res) => {
+const Subscription = require('../models/subscriptionModel'); 
+
+
+exports.updateUserSubscription = async (req, res) => {
+  const { userId, subscriptionTier, durationInDays } = req.body;
+
   try {
-    const { name } = req.params;
-    const regex = new RegExp(name, 'i'); // Create a case-insensitive regular expression
-    const roles = await Role.find({ name: regex }); // Find roles where the name matches the regex
-    res.status(200).json({ success: true, data: roles });
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const validUntil = new Date();
+    validUntil.setDate(validUntil.getDate() + durationInDays);
+
+    user.subscription.tier = subscriptionTier;
+    user.subscription.validUntil = validUntil;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Subscription updated successfully', user });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
+// Create a new subscription package
 
-
-// Update a role by ID
-exports.updateRole = async (req, res) => {
+exports.createSubscription = async (req, res) => {
   try {
-    const { id } = req.params;
-    const role = await Role.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true
-    });
+    console.log(req.body);
