@@ -1,12 +1,21 @@
-      image1,
-      image2,
-      image3,
-    } = req.body;
-    
+      },
+      })
+    }
+    )
+  } catch (err) {
+    res.status(404).json({
+      status: "error",
+      message: "Error retrieving properties",
+    });
+  }
+};
 
-    // Create a new Bookamrk instance
-    const bookmark = new Bookmark({
-      bookId,
+// Create a new property
+
+exports.createProperty = async (req, res) => {
+  try {
+    // Destructure required fields from request body
+    const {
       address,
       agentId,
       bedrooms,
@@ -20,59 +29,9 @@
       approvalStatus,
       reported,
       status,
-      image1,
-      image2,
-      image3
-    });
+      location,
+    } = req.body;
+    
 
-  
-    // Save the bookamrk to the database
-    await bookmark.save();
-
-    // Send success response
-    res.status(201).json({
-      status: "success",
-      data: {
-        bookmark,
-      },
-    });
-  } catch (err) {
-    // Send error response
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
-  }
-};
-
-
-
-// Delete a bookamrk by ID
-exports.deleteBookmark = async (req, res) => {
-  try {
-    await Bookmark.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
-  }
-};
-
-
-const User = require('../models/User');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const jwt = require('jsonwebtoken');
-
-
-exports.register = async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles } = req.body;
-
-    try {
-        const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
-        await newUser.save();
+    // Create a new Property instance
+    const property = new Property({
