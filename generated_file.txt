@@ -1,15 +1,18 @@
+      state,
+      title,
+      approvalStatus,
+      reported,
+      status,
+      location,
+    });
 
-    // Send success response
-    res.status(201).json({
-      status: "success",
-      data: {
-        property,
-      },
-    });
-  } catch (err) {
-    // Send error response
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
-  }
+    
+
+    // If files are uploaded, save their paths to the property object
+    if (req.files) {
+      property.image1 = req.files['image1'] ? req.files['image1'][0].path : undefined;
+      property.image2 = req.files['image2'] ? req.files['image2'][0].path : undefined;
+      property.image3 = req.files['image3'] ? req.files['image3'][0].path : undefined;
+    }
+
+    // Save the property to the database
