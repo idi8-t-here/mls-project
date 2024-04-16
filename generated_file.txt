@@ -1,3 +1,71 @@
+      image1,
+      image2,
+      image3,
+    } = req.body;
+    
+
+    // Create a new Bookamrk instance
+    const bookmark = new Bookmark({
+      bookId,
+      address,
+      agentId,
+      bedrooms,
+      bathrooms,
+      squareFeet,
+      city,
+      description,
+      price,
+      state,
+      title,
+      approvalStatus,
+      reported,
+      status,
+      image1,
+      image2,
+      image3
+    });
+
+  
+    // Save the bookamrk to the database
+    await bookmark.save();
+
+    // Send success response
+    res.status(201).json({
+      status: "success",
+      data: {
+        bookmark,
+      },
+    });
+  } catch (err) {
+    // Send error response
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+
+
+// Delete a bookamrk by ID
+exports.deleteBookmark = async (req, res) => {
+  try {
+    await Bookmark.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+
+const User = require('../models/User');
+const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
 
@@ -8,61 +76,3 @@ exports.register = async (req, res) => {
     try {
         const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
         await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(400).json({ error: 'User registration failed' });
-    }
-};
-exports.login = (req, res, next) => {
-    const { email, password } = req.body;
-
-    console.log("Login request received:", { email, password }); // Log the email and password received
-
-    passport.authenticate('local', { session: false }, (err, user, info) => {
-        if (err) {
-            console.error("Passport authentication error:", err);
-            return res.status(500).json({ message: 'Internal server error' });
-        }
-        if (!user) {
-            console.log("Authentication failed:", info.message || 'Login failed'); // Log any authentication failure messages
-            return res.status(400).json({ message: info.message || 'Login failed' });
-        }
-
-        console.log("User authenticated successfully:", user);
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        // Send response with token and user data
-        res.json({ token, user });
-    })(req, res, next);
-};
-
-const Subscription = require('../models/subscriptionModel'); 
-
-
-exports.updateUserSubscription = async (req, res) => {
-  const { userId, subscriptionTier, durationInDays } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const validUntil = new Date();
-    validUntil.setDate(validUntil.getDate() + durationInDays);
-
-    user.subscription.tier = subscriptionTier;
-    user.subscription.validUntil = validUntil;
-
-    await user.save();
-
-    res.status(200).json({ message: 'Subscription updated successfully', user });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-// Create a new subscription package
-
-exports.createSubscription = async (req, res) => {
-  try {
-    console.log(req.body);
