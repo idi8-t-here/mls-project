@@ -1,38 +1,38 @@
-                />
-              )}
-              {isBookmarkSuccess && (
-                <Modal
-                  title="Remove Bookmark"
-                  body="You have sucessfully removed the property from your bookmark."
-                  onClose={closeModal}
-                  redirectPath="/new-page" // Replace with your desired redirect path
-                />
-              )}
-              <NavigationBar />
-              <div className="breadcrumbs">
-                <div className="container">
-                  <div className="row align-items-center">
-                    <div className="col-lg-6 offset-lg-3 col-md-12 col-12">
-                      <div className="breadcrumbs-content">
-                        <h1 className="page-title">View Profile</h1>
-                        <ul className="breadcrumb-nav">
-                          <li>
-                            <a href="/">Home</a>
-                          </li>
-                          <li>View Profile</li>
-                        </ul>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-group">
+                            <input
+                              name="state"
+                              type="text"
+                              placeholder="State*"
+                              required="required"
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="form-group">
+                            <input
+                              name="price"
+                              type="number"
+                              placeholder="Price*"
+                              required="required"
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <div className="button">
+                            <button type="submit" className="btn">
+                              Add Property
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
-              <section style={{ backgroundColor: "#eee" }}>
-                <div className="container py-5">
-                  <div className="row">
-                    <div className="col-lg-4">
-                      <div className="card mb-4">
-                        <div className="card-body text-center">
-                          <img
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
-                            alt="avatar"
-                            className="rounded-circle img-fluid"
+            </div>
+          </div>
