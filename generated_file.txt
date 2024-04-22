@@ -1,60 +1,70 @@
-          status: 'error',
-          message: 'User not found'
-        });
-      }
-      res.status(200).json({
-        status: 'success',
-        data: {
-          user
-        }
-      });
-    } catch (err) {
-      res.status(500).json({
-        status: 'error',
-        message: 'Internal server error'
-      });
+      const filteredProperties = response.data.data.properties.filter(
+        (property) => property.agentId === profile._id
+      );
+      setProperties(filteredProperties);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
     }
   };
 
-  
-  // Create a new property
-  exports.createUser = async (req, res) => {
-    try {
-      // Create a new user object from the request body
-      const user = new User(req.body);
-  
-      // If there are uploaded files, assign the image path to the user
-      if (req.files && req.files['image']) {
-        user.image = req.files['image'][0].path;
-      }
-  
-      // Save the user to the database
-      await user.save();
-  
-      // Send a successful response
-      res.status(201).json({
-        status: 'success',
-        data: {
-          user
-        }
-      });
-    } catch (err) {
-      // Handle any errors
-      res.status(400).json({
-        status: 'error',
-        message: err.message
-      });
-    }}
-  
-  
-  // Update a property by ID
-  exports.updateUser = async (req, res) => {
-    try {
-      // Extract the files from the request
-      const files = req.files;
-  
-      // Create an object to hold the updates
-      const updates = { ...req.body };
-  
-      // If files are uploaded, add their paths to the updates object
-      if (files.licenceFront) {
+  const getStatusBanner = (status) => {
+    switch (status) {
+      case "approved":
+        return { className: "bg-success", text: "Approved" };
+      case "pending":
+        return { className: "bg-warning", text: "Pending" };
+      case "rejected":
+        return { className: "bg-danger", text: "Rejected" };
+      default:
+        return { className: "bg-secondary", text: "Unknown Status" };
+    }
+  };
+
+  const renderProfile = () => (
+    <>
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row">
+            <div className="col-sm-3">
+              <p className="mb-0">Full Name</p>
+            </div>
+            <div className="col-sm-9">
+              <p className="text-muted mb-0">
+                {profile?.firstName} {profile?.lastName}
+              </p>
+            </div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <p className="mb-0">Email</p>
+            </div>
+            <div className="col-sm-9">
+              <p className="text-muted mb-0">{profile?.email}</p>
+            </div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <p className="mb-0">Phone</p>
+            </div>
+            <div className="col-sm-9">
+              <p className="text-muted mb-0">{profile?.phoneNumber}</p>
+            </div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <p className="mb-0">Username</p>
+            </div>
+            <div className="col-sm-9">
+              <p className="text-muted mb-0">{profile?.userName}</p>
+            </div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-3">
+              <p className="mb-0">Address</p>
+            </div>
+            <div className="col-sm-9">
+              <p className="text-muted mb-0">{profile?.state}</p>
