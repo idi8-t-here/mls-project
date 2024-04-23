@@ -1,38 +1,45 @@
-                        </div>
-                        <div className="col-12">
-                          <div className="form-group">
-                            <input
-                              name="state"
-                              type="text"
-                              placeholder="State*"
-                              required="required"
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          <div className="form-group">
-                            <input
-                              name="price"
-                              type="number"
-                              placeholder="Price*"
-                              required="required"
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
+                        </a>
+                      </form>
+                    </div> */}
+                    {/* End Single Widget */}
+                    {/* Start Single Widget */}
+                    
 
-                        <div className="col-12">
-                          <div className="button">
-                            <button type="submit" className="btn">
-                              Add Property
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
+                    <div className="widget search-widget">
+                      <h5 className="widget-title">Advanced Search</h5>
+                      <form onSubmit={(e) => e.preventDefault()}>
+                        {Object.keys(searchParams).map((param) => (
+                          
+                          <input
+                            key={param}
+                            type="text"
+                            name={param}
+                            placeholder={`Search by ${param}`}
+                            value={searchParams[param]}
+                            onChange={handleAdvancedSearchInputChange}
+                          />
+                          
+                        ))}
+                        <button type="button" onClick={handleAdvancedSearch}>
+                          Search
+                        </button>
+                      </form>
+                    </div>
+                    {/* End Single Widget */}
+                    <NewsComponent />
+                    {/* Start Single Widget */}
+                  
+                    {/* End Single Widget */}
                   </div>
-                </div>
+                </aside>
               </div>
             </div>
-          </div>
+          </section>
+        </>
+      )}
+    </>
+  );
+};
+
+export default Listings;
+import NavigationBar from "./NavigationBar";
