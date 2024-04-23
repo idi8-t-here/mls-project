@@ -1,45 +1,57 @@
-                        </a>
-                      </form>
-                    </div> */}
-                    {/* End Single Widget */}
-                    {/* Start Single Widget */}
-                    
-
-                    <div className="widget search-widget">
-                      <h5 className="widget-title">Advanced Search</h5>
-                      <form onSubmit={(e) => e.preventDefault()}>
-                        {Object.keys(searchParams).map((param) => (
-                          
-                          <input
-                            key={param}
-                            type="text"
-                            name={param}
-                            placeholder={`Search by ${param}`}
-                            value={searchParams[param]}
-                            onChange={handleAdvancedSearchInputChange}
-                          />
-                          
-                        ))}
-                        <button type="button" onClick={handleAdvancedSearch}>
-                          Search
+                          className="primary"
+                          onClick={() =>
+                            setFormData({ ...formData, licenceBack: null })
+                          }
+                        >
+                          Clear
                         </button>
-                      </form>
-                    </div>
-                    {/* End Single Widget */}
-                    <NewsComponent />
-                    {/* Start Single Widget */}
-                  
-                    {/* End Single Widget */}
+                      </div>
+                    ) : (
+                      <p>Drag & drop file here, or click to select file</p>
+                    )}
                   </div>
-                </aside>
+                )}
               </div>
             </div>
-          </section>
-        </>
-      )}
+            {profile && profile.licenceBack ? (
+              <button className="btn btn-success" onClick={handleUpdateProfile}>
+                Upload Licence
+              </button>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
-};
 
-export default Listings;
-import NavigationBar from "./NavigationBar";
+  const renderProperties = () => (
+    <div className="card mb-4">
+      {properties.length > 0 ? (
+        properties.map((prop, index) => {
+          const statusBanner = getStatusBanner(prop.approvalStatus);
+          return (
+            <div className="card-body" key={index}>
+              <div className="container mt-5">
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="image-container position-relative">
+                      <Carousel
+                        images={[prop.image1, prop.image2, prop.image3]}
+                      />
+                      <div
+                        className={`status-banner position-absolute top-0 start-0 p-2 text-white ${statusBanner.className}`}
+                      >
+                        {statusBanner.text}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="property-details">
+                      <h4>{prop?.title}</h4>
+                      <p>
+                        <strong>Address:</strong> {prop.address}
+                      </p>
+                      <p>
+                        <strong>City:</strong> {prop?.city}
