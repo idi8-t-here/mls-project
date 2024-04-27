@@ -1,57 +1,52 @@
-                          className="primary"
-                          onClick={() =>
-                            setFormData({ ...formData, licenceBack: null })
-                          }
-                        >
-                          Clear
-                        </button>
-                      </div>
-                    ) : (
-                      <p>Drag & drop file here, or click to select file</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            {profile && profile.licenceBack ? (
-              <button className="btn btn-success" onClick={handleUpdateProfile}>
-                Upload Licence
-              </button>
-            ) : (
-              <></>
-            )}
-          </div>
+import React from 'react';
+
+const ViewCharts = () => {
+    return (
+        <div>
+            <iframe
+  style={{
+    background: "#FFFFFF",
+    border: "none",
+    borderRadius: 2,
+    boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)"
+  }}
+  width={640}
+  height={480}
+  src="https://charts.mongodb.com/charts-project-0-wqqmmiw/embed/charts?id=663bb622-181a-49b3-8a37-c8035adf04af&maxDataAge=3600&theme=light&autoRefresh=true"
+/>
+
+        </div>
+    );
+}
+
+export default ViewCharts;
+import React from "react";
+
+const PreloaderComponent = () => {
+  return (
+    <div className="preloader">
+      <div className="preloader-inner">
+        <div className="preloader-icon">
+          <span />
+          <span />
         </div>
       </div>
-    </>
+    </div>
   );
+};
 
-  const renderProperties = () => (
-    <div className="card mb-4">
-      {properties.length > 0 ? (
-        properties.map((prop, index) => {
-          const statusBanner = getStatusBanner(prop.approvalStatus);
-          return (
-            <div className="card-body" key={index}>
-              <div className="container mt-5">
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="image-container position-relative">
-                      <Carousel
-                        images={[prop.image1, prop.image2, prop.image3]}
-                      />
-                      <div
-                        className={`status-banner position-absolute top-0 start-0 p-2 text-white ${statusBanner.className}`}
-                      >
-                        {statusBanner.text}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="property-details">
-                      <h4>{prop?.title}</h4>
-                      <p>
-                        <strong>Address:</strong> {prop.address}
-                      </p>
-                      <p>
-                        <strong>City:</strong> {prop?.city}
+export default PreloaderComponent;
+import React, { useEffect, useRef } from 'react';
+
+function MetypeWidget() {
+  const scriptLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (scriptLoadedRef.current) {
+      return;
+    }
+
+    // Metype initialization script
+    window.talktype = window.talktype || function(f) {
+      if (window.talktype.loaded)
+        f();
