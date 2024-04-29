@@ -1,41 +1,23 @@
-        }
-      });
-    } catch (err) {
-      // Handle any errors
-      res.status(400).json({
-        status: 'error',
-        message: err.message
-      });
-    }}
-  
-  
-  // Update a property by ID
-  exports.updateUser = async (req, res) => {
-    try {
-      // Extract the files from the request
-      const files = req.files;
-  
-      // Create an object to hold the updates
-      const updates = { ...req.body };
-  
-      // If files are uploaded, add their paths to the updates object
-      if (files.licenceFront) {
-        updates.licenceFront = files.licenceFront[0].path;
-      }
-      if (files.licenceBack) {
-        updates.licenceBack = files.licenceBack[0].path;
-      }
-  
-      // Update the user document in the database
-      const user = await User.findByIdAndUpdate(req.params.id, updates, {
-        new: true,
-        runValidators: true, // Ensure any schema validation rules are applied
-      });
-  
-      res.status(200).json({
-        status: 'success',
-        data: {
-          user,
-        },
-      });
-    } catch (err) {
+
+// Update a subscription package
+exports.updateSubscription = async (req, res) => {
+  try {
+    const { name, subscriptionType, startDate, endDate } = req.body;
+    const subscription = await Subscription.findByIdAndUpdate(
+      req.params.id,
+      { name, subscriptionType, startDate, endDate },
+      { new: true, runValidators: true }
+    );
+    if (!subscription) {
+      return res.status(404).json({ message: 'Subscription not found' });
+    }
+    res.status(200).json(subscription);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Delete a subscription package
+exports.deleteSubscription = async (req, res) => {
+  try {
+    const subscription = await Subscription.findByIdAndDelete(req.params.id);
