@@ -1,23 +1,61 @@
-
-// Update a subscription package
-exports.updateSubscription = async (req, res) => {
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+exports.updateRejectStatus = async (req, res) => {
   try {
-    const { name, subscriptionType, startDate, endDate } = req.body;
-    const subscription = await Subscription.findByIdAndUpdate(
-      req.params.id,
-      { name, subscriptionType, startDate, endDate },
-      { new: true, runValidators: true }
-    );
-    if (!subscription) {
-      return res.status(404).json({ message: 'Subscription not found' });
-    }
-    res.status(200).json(subscription);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    const propertyId = req.params.id;
+    await Property.findByIdAndUpdate(propertyId,{reported: false},{new: true, runValidators: true})
+    .then(updatedProperty => res.json(updatedProperty))
+    .catch(err => res.status(400). json(err));
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
   }
 };
 
-// Delete a subscription package
-exports.deleteSubscription = async (req, res) => {
+
+// Delete a property by ID
+exports.deleteProperty = async (req, res) => {
   try {
-    const subscription = await Subscription.findByIdAndDelete(req.params.id);
+    await Property.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "success",
+      data: null,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+
+const Bookmark = require("../models/bookmarkModel");
+const multer = require("multer");
+const path = require("path")
+
+
+
+
+exports.getAllBookmarks = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.find();
+    res.status(200).json({
+      status: "success",
+      data: {
+        bookmark,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
