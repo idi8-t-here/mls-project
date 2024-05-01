@@ -1,69 +1,66 @@
-    const filtered = properties.filter((property) =>
-      property.title.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setFilteredProperties(filtered);
-    setCurrentPage(1);
-  };
-
-  const handleSearchFormSubmit = (e) => {
-    e.preventDefault();
-    const filtered = properties.filter((property) =>
-      property.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProperties(filtered);
-    setCurrentPage(1); // Reset to first page
-  };
-
-  const handleCategoryClick = (category) => {
-    const filtered = properties.filter(
-      (property) => property.categories.toLowerCase() === category.toLowerCase()
-    );
-    setFilteredProperties(filtered);
-    setCurrentPage(1); // Reset to first page
-  };
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleAdvancedSearchInputChange = (e) => {
-    const { name, value } = e.target;
-    setSearchParams((prevParams) => ({
-      ...prevParams,
-      [name]: value,
-    }));
-  };
-
-  const handleAdvancedSearch = () => {
-    const filtered = properties.filter((property) => {
-      return Object.keys(searchParams).every((key) => {
-        if (!searchParams[key]) return true;
-
-        const propValue = property[key];
-        if (propValue === undefined || propValue === null) return false;
-
-        if (key === 'price') {
-          return propValue === Number(searchParams[key]);
-        }
-
-        if (typeof propValue === "number") {
-          return propValue === Number(searchParams[key]);
-        }
-
-        return String(propValue).toLowerCase().includes(searchParams[key].toLowerCase());
-      });
-    });
-    setFilteredProperties(filtered);
-    setCurrentPage(1); 
-  };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProperties = filteredProperties.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
-
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="card mb-4">
+          <div className="card-body">
+            <div className="row">
+              <div className="col-sm-3">
+                <p className="mb-0">License Front</p>
+              </div>
+              <div className="col-sm-9">
+                {profile && profile.licenceFront ? (
+                  <img
+                    src={`http://localhost:3000/${profile.licenceFront}`}
+                    alt="Front of License"
+                  />
+                ) : (
+                  <div className="container dropzone">
+                    <input
+                      type="file"
+                      name="licenceFront"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                    {formData.licenceFront ? (
+                      <div key={formData.licenceFront.name}>
+                        <img
+                          src={URL.createObjectURL(formData.licenceFront)}
+                          alt="Front of License"
+                        />
+                        <button
+                          className="primary"
+                          onClick={() =>
+                            setFormData({ ...formData, licenceFront: null })
+                          }
+                        >
+                          Clear
+                        </button>
+                      </div>
+                    ) : (
+                      <p>Drag & drop file here, or click to select file</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <hr />
+            <div className="row">
+              <div className="col-sm-3">
+                <p className="mb-0">License Back</p>
+              </div>
+              <div className="col-sm-9">
+                {profile && profile.licenceBack ? (
+                  <img
+                    src={`http://localhost:3000/${profile.licenceBack}`}
+                    alt="Back of License"
+                  />
+                ) : (
+                  <div className="container dropzone">
+                    <input
+                      type="file"
+                      name="licenceBack"
+                      accept="image/*"
+                      onChange={handleFileChange}
