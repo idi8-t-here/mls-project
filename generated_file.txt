@@ -1,66 +1,72 @@
-              </p>
-            </div>
+          {property.status}
+        </div>
+        {/* End Status Badge */}
+        <div className="blog-img">
+          
+          <Carousel images={[property.image1, property.image2, property.image3]} />
+       
+        </div>
+        <div className="blog-content">
+          <h4>
+            <Link to={`/listingdetails/${property._id}`}>{property.title}</Link>
+          </h4>
+          <p>{property.description}</p>
+          <div className="meta-info mt-2">
+            <a className="date" href="javascript:void(0)">
+              <i className="lni lni-timer" /> {property.city}
+            </a>
+            <a className="author" href="javascript:void(0)">
+              <i className="lni lni-user" /> {property.state}
+            </a>
+          </div>
+          <h6 className="mt-3">$ {property.price}</h6>
+          <div className="button">
+            <Link to={`/listingdetails/${property._id}`} className="btn">
+              View Details
+            </Link>{" "}
+            <br />
+            <a className="button" onClick={handleBookmark}>
+              Bookmark
+            </a>
           </div>
         </div>
       </div>
-      <div>
-        <div className="card mb-4">
-          <div className="card-body">
-            <div className="row">
-              <div className="col-sm-3">
-                <p className="mb-0">License Front</p>
-              </div>
-              <div className="col-sm-9">
-                {profile && profile.licenceFront ? (
-                  <img
-                    src={`http://localhost:3000/${profile.licenceFront}`}
-                    alt="Front of License"
-                  />
-                ) : (
-                  <div className="container dropzone">
-                    <input
-                      type="file"
-                      name="licenceFront"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                    />
-                    {formData.licenceFront ? (
-                      <div key={formData.licenceFront.name}>
-                        <img
-                          src={URL.createObjectURL(formData.licenceFront)}
-                          alt="Front of License"
-                        />
-                        <button
-                          className="primary"
-                          onClick={() =>
-                            setFormData({ ...formData, licenceFront: null })
-                          }
-                        >
-                          Clear
-                        </button>
-                      </div>
-                    ) : (
-                      <p>Drag & drop file here, or click to select file</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            <hr />
-            <div className="row">
-              <div className="col-sm-3">
-                <p className="mb-0">License Back</p>
-              </div>
-              <div className="col-sm-9">
-                {profile && profile.licenceBack ? (
-                  <img
-                    src={`http://localhost:3000/${profile.licenceBack}`}
-                    alt="Back of License"
-                  />
-                ) : (
-                  <div className="container dropzone">
-                    <input
-                      type="file"
-                      name="licenceBack"
-                      accept="image/*"
-                      onChange={handleFileChange}
+    </div>
+  );
+};
+
+export default ListingCard;
+import React from 'react';
+
+const ViewCharts = () => {
+    return (
+        <div>
+            <iframe
+  style={{
+    background: "#FFFFFF",
+    border: "none",
+    borderRadius: 2,
+    boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)"
+  }}
+  width={640}
+  height={480}
+  src="https://charts.mongodb.com/charts-project-0-wqqmmiw/embed/charts?id=663bb622-181a-49b3-8a37-c8035adf04af&maxDataAge=3600&theme=light&autoRefresh=true"
+/>
+
+        </div>
+    );
+}
+
+export default ViewCharts;
+import React from "react";
+
+const PreloaderComponent = () => {
+  return (
+    <div className="preloader">
+      <div className="preloader-inner">
+        <div className="preloader-icon">
+          <span />
+          <span />
+        </div>
+      </div>
+    </div>
