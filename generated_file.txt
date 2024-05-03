@@ -1,22 +1,27 @@
-  try {
-    console.log(req.body);
-    const { name, subscriptionType, startDate, endDate, smallText, price, offers } = req.body;
-
-    // Create a new subscription instance
-    const newSubscription = new Subscription({
-      name,
-      subscriptionType,
-      smallText,
-      price,
-      offers,
-      startDate,
-      endDate,
+    )
+  } catch (err) {
+    res.status(404).json({
+      status: "error",
+      message: "Error retrieving properties",
     });
-
-    // Save the subscription to the database
-    await newSubscription.save();
-
-    res.status(201).json({ message: 'Subscription created successfully', subscription: newSubscription });
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating subscription', error });
   }
+};
+
+// Create a new property
+
+exports.createProperty = async (req, res) => {
+  try {
+    // Destructure required fields from request body
+    const {
+      address,
+      agentId,
+      bedrooms,
+      bathrooms,
+      squareFeet,
+      city,
+      description,
+      price,
+      state,
+      title,
+      approvalStatus,
+      reported,
