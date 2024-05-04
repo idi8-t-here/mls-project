@@ -1,22 +1,61 @@
-                      <h3 className="title">Add Location</h3>
-                      <div>
-                        <input
-                          type="text"
-                          value={location}
-                          onChange={handleInputChange}
-                          placeholder="Enter location"
-                        />
-                        <button className="btn" onClick={handleSearch}>Search</button>
+  };
 
-                        <MapContainer
-                          center={coordinates}
-                          zoom={13}
-                          style={{ height: "400px", width: "100%" }}
-                        >
-                          <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                          />
-                          <Marker position={coordinates}></Marker>
-                        </MapContainer>
-                      </div>
+  const handleAdvancedSearchInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams((prevParams) => ({
+      ...prevParams,
+      [name]: value,
+    }));
+  };
+
+  const handleAdvancedSearch = () => {
+    const filtered = properties.filter((property) => {
+      return Object.keys(searchParams).every((key) => {
+        if (!searchParams[key]) return true;
+
+        const propValue = property[key];
+        if (propValue === undefined || propValue === null) return false;
+
+        if (key === 'price') {
+          return propValue === Number(searchParams[key]);
+        }
+
+        if (typeof propValue === "number") {
+          return propValue === Number(searchParams[key]);
+        }
+
+        return String(propValue).toLowerCase().includes(searchParams[key].toLowerCase());
+      });
+    });
+    setFilteredProperties(filtered);
+    setCurrentPage(1); 
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProperties = filteredProperties.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+
+  return (
+    <>
+      {loading ? (
+        <PreloaderComponent />
+      ) : (
+        <>
+          <NavigationBar />
+          <div className="breadcrumbs">
+            <div className="container">
+              <div className="row align-items-center">
+                <div className="col-lg-6 offset-lg-3 col-md-12 col-12">
+                  <div className="breadcrumbs-content">
+                    <h1 className="page-title">All Properties</h1>
+                    <ul className="breadcrumb-nav">
+                      <li>
+                        <a href="index.html">Home</a>
+                      </li>
+                      <li>properties</li>
