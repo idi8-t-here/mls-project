@@ -1,58 +1,11 @@
-                        <p>
-                          <strong>State:</strong> {prop.state}
-                        </p>
-                        <p>
-                          <strong>Price:</strong>{" "}
-                          {`$${prop.price.toLocaleString()}`}
-                        </p>
-                        <p>
-                          <strong>Bedrooms:</strong> {prop.bedrooms}
-                        </p>
-                        <p>
-                          <strong>Description:</strong> {prop.description}
-                        </p>
-                        <button
-                          className="btn btn-danger mt-2"
-                          onClick={() => handleRemoveBookmark(prop._id)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <div className="card-body">
-            <p>No Bookmarks available</p>
-          </div>
-        )}
-      </div>
-    );
+    const { name, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files[0],
+    });
   };
 
-  const renderComponent = () => {
-    switch (selectedComponent) {
-      case "profile":
-        return renderProfile();
-      case "property":
-        return renderProperties();
-      case "bookmark":
-        return renderBookmarks();
-      default:
-        return null;
-    }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setIsBookmarkSuccess(false);
   };
-
-  return (
-    <>
-      {loading ? (
-        <PreloaderComponent />
-      ) : (
-        <>
-          {user ? (
-            <>
-              {isModalOpen && (
-                <Modal
