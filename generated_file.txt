@@ -1,51 +1,18 @@
-                        >
-                          Next
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  {/*/ End Pagination */}
-                </div>
-                <aside className="col-lg-4 col-md-12 col-12">
-                  <div className="sidebar">
-                    {/* Start Single Widget */}
-                    {/* <div className="widget search-widget">
-                      <h5 className="widget-title">Search Realestate</h5>
-                      <form onSubmit={handleSearchFormSubmit}>
-                        <input
-                          type="text"
-                          placeholder="Search ..."
-                          value={searchQuery}
-                          onChange={handleSearchInputChange}
-                        />
-                        <a type="submit">
-                          <i className="lni lni-search-alt" />
-                        </a>
-                      </form>
-                    </div> */}
-                    {/* End Single Widget */}
-                    {/* Start Single Widget */}
-                    
-
-                    <div className="widget search-widget">
-                      <h5 className="widget-title">Advanced Search</h5>
-                      <form onSubmit={(e) => e.preventDefault()}>
-                        {Object.keys(searchParams).map((param) => (
-                          
-                          <input
-                            key={param}
-                            type="text"
-                            name={param}
-                            placeholder={`Search by ${param}`}
-                            value={searchParams[param]}
-                            onChange={handleAdvancedSearchInputChange}
-                          />
-                          
-                        ))}
-                        <button type="button" onClick={handleAdvancedSearch}>
-                          Search
-                        </button>
-                      </form>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    {/* End Single Widget */}
-                    <NewsComponent />
+                    <div className="col-lg-8">{renderComponent()}</div>
+                  </div>
+                </div>
+              </section>
+            </>
+          ) : (
+            <SignInWarning />
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
