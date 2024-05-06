@@ -1,18 +1,11 @@
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div className="col-lg-8">{renderComponent()}</div>
-                  </div>
-                </div>
-              </section>
-            </>
-          ) : (
-            <SignInWarning />
-          )}
-        </>
-      )}
-    </>
-  );
-};
-
+          
+          <Carousel images={[property.image1, property.image2, property.image3]} />
+       
+        </div>
+        <div className="blog-content">
+          <h4>
+            <Link to={`/listingdetails/${property._id}`}>{property.title}</Link>
+          </h4>
+          <p>{property.description}</p>
+          <div className="meta-info mt-2">
+            <a className="date" href="javascript:void(0)">
