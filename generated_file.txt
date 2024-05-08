@@ -1,20 +1,3 @@
-    });
-
-    
-
-    // If files are uploaded, save their paths to the property object
-    if (req.files) {
-      property.image1 = req.files['image1'] ? req.files['image1'][0].path : undefined;
-      property.image2 = req.files['image2'] ? req.files['image2'][0].path : undefined;
-      property.image3 = req.files['image3'] ? req.files['image3'][0].path : undefined;
-    }
-
-    // Save the property to the database
-    await property.save();
-
-    // Send success response
-    res.status(201).json({
-      status: "success",
       data: {
         property,
       },
@@ -51,5 +34,3 @@ exports.updateProperty = async (req, res) => {
 
 
 exports.updateApprovalStatus = async (req, res) => {
-  try {
-    const propertyId = req.params.id;
