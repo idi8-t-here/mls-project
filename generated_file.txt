@@ -1,27 +1,55 @@
-    )
+    });
+
+    
+
+    // If files are uploaded, save their paths to the property object
+    if (req.files) {
+      property.image1 = req.files['image1'] ? req.files['image1'][0].path : undefined;
+      property.image2 = req.files['image2'] ? req.files['image2'][0].path : undefined;
+      property.image3 = req.files['image3'] ? req.files['image3'][0].path : undefined;
+    }
+
+    // Save the property to the database
+    await property.save();
+
+    // Send success response
+    res.status(201).json({
+      status: "success",
+      data: {
+        property,
+      },
+    });
   } catch (err) {
-    res.status(404).json({
+    // Send error response
+    res.status(400).json({
       status: "error",
-      message: "Error retrieving properties",
+      message: err.message,
     });
   }
 };
 
-// Create a new property
-
-exports.createProperty = async (req, res) => {
+// Update a property by ID
+exports.updateProperty = async (req, res) => {
   try {
-    // Destructure required fields from request body
-    const {
-      address,
-      agentId,
-      bedrooms,
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
-      title,
-      approvalStatus,
-      reported,
+    const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      data: {
+        property,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+
+
+exports.updateApprovalStatus = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
