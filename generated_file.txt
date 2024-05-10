@@ -1,11 +1,66 @@
-          
-          <Carousel images={[property.image1, property.image2, property.image3]} />
-       
+            </a>
+          </div>
         </div>
-        <div className="blog-content">
-          <h4>
-            <Link to={`/listingdetails/${property._id}`}>{property.title}</Link>
-          </h4>
-          <p>{property.description}</p>
-          <div className="meta-info mt-2">
-            <a className="date" href="javascript:void(0)">
+      </div>
+    </div>
+  );
+};
+
+export default ListingCard;
+import React from 'react';
+
+const ViewCharts = () => {
+    return (
+        <div>
+            <iframe
+  style={{
+    background: "#FFFFFF",
+    border: "none",
+    borderRadius: 2,
+    boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)"
+  }}
+  width={640}
+  height={480}
+  src="https://charts.mongodb.com/charts-project-0-wqqmmiw/embed/charts?id=663bb622-181a-49b3-8a37-c8035adf04af&maxDataAge=3600&theme=light&autoRefresh=true"
+/>
+
+        </div>
+    );
+}
+
+export default ViewCharts;
+import React from "react";
+
+const PreloaderComponent = () => {
+  return (
+    <div className="preloader">
+      <div className="preloader-inner">
+        <div className="preloader-icon">
+          <span />
+          <span />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PreloaderComponent;
+import React, { useEffect, useRef } from 'react';
+
+function MetypeWidget() {
+  const scriptLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (scriptLoadedRef.current) {
+      return;
+    }
+
+    // Metype initialization script
+    window.talktype = window.talktype || function(f) {
+      if (window.talktype.loaded)
+        f();
+      else
+        (window.talktype.q = window.talktype.q || []).push(arguments);
+    };
+
+    // Load Metype script
