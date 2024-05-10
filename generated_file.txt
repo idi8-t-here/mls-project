@@ -1,32 +1,3 @@
-      data: {
-        property,
-      },
-    });
-  } catch (err) {
-    // Send error response
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
-  }
-};
-
-// Update a property by ID
-exports.updateProperty = async (req, res) => {
-  try {
-    const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    res.status(200).json({
-      status: "success",
-      data: {
-        property,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "error",
       message: err.message,
     });
   }
@@ -34,3 +5,7 @@ exports.updateProperty = async (req, res) => {
 
 
 exports.updateApprovalStatus = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
+    await Property.findByIdAndUpdate(propertyId,{approvalStatus: "approved"},{new: true, runValidators: true})
+    .then(updatedProperty => res.json(updatedProperty))
