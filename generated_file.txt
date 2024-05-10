@@ -1,11 +1,54 @@
+      return res.status(404).json({
+        status: "error",
+        message: "No bookmarks found",
+      });
+    }
+    res.status(200).json({
+      status: "success",
+      data: {
+        bookmarks,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
       message: err.message,
     });
   }
 };
 
 
-exports.updateApprovalStatus = async (req, res) => {
+
+
+
+// Create a new bookmark
+
+exports.createBookmark = async (req, res) => {
   try {
-    const propertyId = req.params.id;
-    await Property.findByIdAndUpdate(propertyId,{approvalStatus: "approved"},{new: true, runValidators: true})
-    .then(updatedProperty => res.json(updatedProperty))
+    // Destructure required fields from request body
+    const {
+      bookId,
+      address,
+      agentId,
+      bedrooms,
+      bathrooms,
+      squareFeet,
+      city,
+      description,
+      price,
+      state,
+      title,
+      approvalStatus,
+      reported,
+      status,
+      image1,
+      image2,
+      image3,
+    } = req.body;
+    
+
+    // Create a new Bookamrk instance
+    const bookmark = new Bookmark({
+      bookId,
+      address,
+      agentId,
