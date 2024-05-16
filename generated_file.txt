@@ -1,6 +1,10 @@
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
       status: "success",
       data: {
-        bookmarks,
+        property,
       },
     });
   } catch (err) {
@@ -12,22 +16,17 @@
 };
 
 
-
-
-
-// Create a new bookmark
-
-exports.createBookmark = async (req, res) => {
+exports.updateApprovalStatus = async (req, res) => {
   try {
-    // Destructure required fields from request body
-    const {
-      bookId,
-      address,
-      agentId,
-      bedrooms,
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
+    const propertyId = req.params.id;
+    await Property.findByIdAndUpdate(propertyId,{approvalStatus: "approved"},{new: true, runValidators: true})
+    .then(updatedProperty => res.json(updatedProperty))
+    .catch(err => res.status(400). json(err));
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+exports.updateRejectStatus = async (req, res) => {
