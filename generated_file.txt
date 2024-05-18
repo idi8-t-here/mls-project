@@ -1,20 +1,21 @@
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+      status,
+      location,
+    } = req.body;
+    
 
-// Get a single subscription package by ID
-exports.getSubscriptionById = async (req, res) => {
-  try {
-    const subscription = await Subscription.findById(req.params.id);
-    if (!subscription) {
-      return res.status(404).json({ message: 'Subscription not found' });
-    }
-    res.status(200).json(subscription);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-
-// Update a subscription package
+    // Create a new Property instance
+    const property = new Property({
+      address,
+      agentId,
+      bedrooms,
+      bathrooms,
+      squareFeet,
+      city,
+      description,
+      price,
+      state,
+      title,
+      approvalStatus,
+      reported,
+      status,
+      location,
