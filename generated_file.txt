@@ -1,21 +1,47 @@
-      status,
-      location,
-    } = req.body;
-    
+  try {
+    const properties = await Property.find();
+    res.status(200).json({
+      status: "success",
+      data: {
+        properties,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
 
-    // Create a new Property instance
-    const property = new Property({
-      address,
-      agentId,
-      bedrooms,
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
-      title,
-      approvalStatus,
-      reported,
-      status,
-      location,
+exports.getProperty = async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: {
+        property,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "error",
+      message: "Property not found",
+    });
+  }
+};
+
+exports.getPropertyByAgentId = async (req, res) => {
+  try {
+    const properties = await Property.find({ agentId: req.params.agentId });
+    if (properties.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "No properties found for this agent",
+      });
+    }
+    res.status(200).then((req, res) => {
+      Property.findById(properties.data.properties._id)
+      res.status(200).json({
+        status: "success",
+      data: {
