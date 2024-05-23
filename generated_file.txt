@@ -1,29 +1,38 @@
+        message: 'Property not found'
+      });
     }
+  };
 
-    const validUntil = new Date();
-    validUntil.setDate(validUntil.getDate() + durationInDays);
 
-    user.subscription.tier = subscriptionTier;
-    user.subscription.validUntil = validUntil;
+  exports.updateUserStatus = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      await User.findByIdAndUpdate(userId,{userStatus: "verified"},{new: true, runValidators: true})
+      .then(updatedUser => res.json(updatedUser))
+      .catch(err => res.status(400). json(err));
+    } catch (err) {
+      res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  };
+  exports.rejectUserStatus = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      await User.findByIdAndUpdate(userId,{userStatus: "rejected"},{new: true, runValidators: true})
+      .then(updatedUser => res.json(updatedUser))
+      .catch(err => res.status(400). json(err));
+    } catch (err) {
+      res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+  };
 
-    await user.save();
-
-    res.status(200).json({ message: 'Subscription updated successfully', user });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-// Create a new subscription package
-
-exports.createSubscription = async (req, res) => {
-  try {
-    console.log(req.body);
-    const { name, subscriptionType, startDate, endDate, smallText, price, offers } = req.body;
-
-    // Create a new subscription instance
-    const newSubscription = new Subscription({
-      name,
-      subscriptionType,
-      smallText,
-      price,
-      offers,
+  exports.getUserByEmail = async (req, res) => {
+    try {
+      const user = await User.findOne({ email: req.params.email });
+      if (!user) {
+        return res.status(404).json({
