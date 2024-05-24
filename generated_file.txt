@@ -1,53 +1,29 @@
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
-      title,
-      approvalStatus,
-      reported,
-      status,
-      location,
-    } = req.body;
-    
-
-    // Create a new Property instance
-    const property = new Property({
-      address,
-      agentId,
-      bedrooms,
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
-      title,
-      approvalStatus,
-      reported,
-      status,
-      location,
-    });
-
-    
-
-    // If files are uploaded, save their paths to the property object
-    if (req.files) {
-      property.image1 = req.files['image1'] ? req.files['image1'][0].path : undefined;
-      property.image2 = req.files['image2'] ? req.files['image2'][0].path : undefined;
-      property.image3 = req.files['image3'] ? req.files['image3'][0].path : undefined;
     }
 
-    // Save the property to the database
-    await property.save();
+    const validUntil = new Date();
+    validUntil.setDate(validUntil.getDate() + durationInDays);
 
-    // Send success response
-    res.status(201).json({
-      status: "success",
-      data: {
-        property,
-      },
-    });
-  } catch (err) {
-    // Send error response
+    user.subscription.tier = subscriptionTier;
+    user.subscription.validUntil = validUntil;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Subscription updated successfully', user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Create a new subscription package
+
+exports.createSubscription = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { name, subscriptionType, startDate, endDate, smallText, price, offers } = req.body;
+
+    // Create a new subscription instance
+    const newSubscription = new Subscription({
+      name,
+      subscriptionType,
+      smallText,
+      price,
+      offers,
