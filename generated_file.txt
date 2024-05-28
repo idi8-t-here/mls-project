@@ -1,9 +1,6 @@
-
-    // Send success response
-    res.status(201).json({
       status: "success",
       data: {
-        property,
+        bookmark,
       },
     });
   } catch (err) {
