@@ -1,25 +1,45 @@
-    // Create a new Property instance
-    const property = new Property({
-      address,
-      agentId,
-      bedrooms,
-      bathrooms,
-      squareFeet,
-      city,
-      description,
-      price,
-      state,
-      title,
-      approvalStatus,
-      reported,
-      status,
-      location,
+    res.status(400).json({
+      status: "error",
+      message: err.message,
     });
+  }
+};
 
-    
+// Update a property by ID
+exports.updateProperty = async (req, res) => {
+  try {
+    const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: "success",
+      data: {
+        property,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
 
-    // If files are uploaded, save their paths to the property object
-    if (req.files) {
-      property.image1 = req.files['image1'] ? req.files['image1'][0].path : undefined;
-      property.image2 = req.files['image2'] ? req.files['image2'][0].path : undefined;
-      property.image3 = req.files['image3'] ? req.files['image3'][0].path : undefined;
+
+exports.updateApprovalStatus = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
+    await Property.findByIdAndUpdate(propertyId,{approvalStatus: "approved"},{new: true, runValidators: true})
+    .then(updatedProperty => res.json(updatedProperty))
+    .catch(err => res.status(400). json(err));
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
+exports.updateRejectStatus = async (req, res) => {
+  try {
+    const propertyId = req.params.id;
