@@ -1,21 +1,30 @@
-    const { id } = req.params;
-    const role = await Role.findByIdAndUpdate(id, req.body, {
-      new: true,
-      runValidators: true
+
+// Delete a property by ID
+exports.deleteProperty = async (req, res) => {
+  try {
+    await Property.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "success",
+      data: null,
     });
-    if (!role) {
-      return res.status(404).json({ success: false, error: 'Role not found' });
-    }
-    res.status(200).json({ success: true, data: role });
-  } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+  } catch (err) {
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
   }
 };
 
-// Delete a role by ID
-exports.deleteRole = async (req, res) => {
+
+const Bookmark = require("../models/bookmarkModel");
+const multer = require("multer");
+const path = require("path")
+
+
+
+
+exports.getAllBookmarks = async (req, res) => {
   try {
-    const { id } = req.params;
-    const role = await Role.findByIdAndDelete(id);
-    if (!role) {
-      return res.status(404).json({ success: false, error: 'Role not found' });
+    const bookmark = await Bookmark.find();
+    res.status(200).json({
+      status: "success",
