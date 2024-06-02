@@ -1,54 +1,36 @@
-  } catch (err) {
-    // Send error response
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
-  }
 };
 
-
-
-// Delete a bookamrk by ID
-exports.deleteBookmark = async (req, res) => {
+// Get all roles
+exports.getRoles = async (req, res) => {
   try {
-    await Bookmark.findByIdAndDelete(req.params.id);
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "error",
-      message: err.message,
-    });
+    const roles = await Role.find();
+    res.status(200).json({ success: true, data: roles });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// Get roles by name
+exports.getRolesByName = async (req, res) => {
+  try {
+    const { name } = req.params;
+    const regex = new RegExp(name, 'i'); // Create a case-insensitive regular expression
+    const roles = await Role.find({ name: regex }); // Find roles where the name matches the regex
+    res.status(200).json({ success: true, data: roles });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
 
-const User = require('../models/User');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const jwt = require('jsonwebtoken');
-
-
-exports.register = async (req, res) => {
-    const { firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles } = req.body;
-
-    try {
-        const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(400).json({ error: 'User registration failed' });
+// Update a role by ID
+exports.updateRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const role = await Role.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true
+    });
+    if (!role) {
+      return res.status(404).json({ success: false, error: 'Role not found' });
     }
-};
-exports.login = (req, res, next) => {
-    const { email, password } = req.body;
-
-    console.log("Login request received:", { email, password }); // Log the email and password received
-
-    passport.authenticate('local', { session: false }, (err, user, info) => {
-        if (err) {
-            console.error("Passport authentication error:", err);
-            return res.status(500).json({ message: 'Internal server error' });
