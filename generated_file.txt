@@ -1,8 +1,18 @@
+  } catch (err) {
+    // Send error response
+    res.status(400).json({
+      status: "error",
+      message: err.message,
+    });
+  }
+};
 
-// Delete a property by ID
-exports.deleteProperty = async (req, res) => {
+
+
+// Delete a bookamrk by ID
+exports.deleteBookmark = async (req, res) => {
   try {
-    await Property.findByIdAndDelete(req.params.id);
+    await Bookmark.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "success",
       data: null,
@@ -16,15 +26,29 @@ exports.deleteProperty = async (req, res) => {
 };
 
 
-const Bookmark = require("../models/bookmarkModel");
-const multer = require("multer");
-const path = require("path")
+const User = require('../models/User');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
 
 
+exports.register = async (req, res) => {
+    const { firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles } = req.body;
 
+    try {
+        const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(400).json({ error: 'User registration failed' });
+    }
+};
+exports.login = (req, res, next) => {
+    const { email, password } = req.body;
 
-exports.getAllBookmarks = async (req, res) => {
-  try {
-    const bookmark = await Bookmark.find();
-    res.status(200).json({
-      status: "success",
+    console.log("Login request received:", { email, password }); // Log the email and password received
+
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            console.error("Passport authentication error:", err);
+            return res.status(500).json({ message: 'Internal server error' });
