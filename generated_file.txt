@@ -1,19 +1,30 @@
-  try {
-    const { name, subscriptionType, startDate, endDate } = req.body;
-    const subscription = await Subscription.findByIdAndUpdate(
-      req.params.id,
-      { name, subscriptionType, startDate, endDate },
-      { new: true, runValidators: true }
-    );
-    if (!subscription) {
-      return res.status(404).json({ message: 'Subscription not found' });
-    }
-    res.status(200).json(subscription);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
   }
 };
 
-// Delete a subscription package
-exports.deleteSubscription = async (req, res) => {
-  try {
+
+const User = require('../models/User');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
+
+
+exports.register = async (req, res) => {
+    const { firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles } = req.body;
+
+    try {
+        const newUser = new User({ firstName, lastName, email, phoneNumber, password, userName, state, userType, userRoles });
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
+    } catch (error) {
+        res.status(400).json({ error: 'User registration failed' });
+    }
+};
+exports.login = (req, res, next) => {
+    const { email, password } = req.body;
+
+    console.log("Login request received:", { email, password }); // Log the email and password received
+
+    passport.authenticate('local', { session: false }, (err, user, info) => {
+        if (err) {
+            console.error("Passport authentication error:", err);
+            return res.status(500).json({ message: 'Internal server error' });
